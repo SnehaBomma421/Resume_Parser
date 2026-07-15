@@ -5,7 +5,6 @@ Upload a resume in PDF or DOCX format and automatically extract structured
 candidate information using AI / NLP techniques.
 """
 
-import json
 import os
 import tempfile
 from pathlib import Path

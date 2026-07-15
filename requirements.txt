@@ -1,10 +1,16 @@
-streamlit>=1.28.0
-spacy>=3.7.0
-pdfplumber>=0.10.0
-python-docx>=1.1.0
-pandas>=2.0.0
+# === Core dependencies (pinned for reproducible builds) ===
+# All versions verified for Python 3.12 compatibility with pre-built wheels
+# on Linux x86_64 (Streamlit Community Cloud environment).
 
-# spaCy English model — must be pre-installed during build phase (Streamlit Cloud
-# filesystem is read-only at runtime; any runtime install attempt will fail).
-# https://spacy.io/models/en
+streamlit==1.59.2
+spacy==3.7.5
+pdfplumber==0.11.10
+python-docx==1.2.0
+pandas==2.2.3
+
+# === spaCy English model ===
+# Installed via direct wheel URL so it's baked into the deployment image
+# during the build phase. Streamlit Cloud filesystem is read-only at runtime,
+# so the model MUST be pre-installed here — never via spacy.cli.download().
+# Compatible with spaCy >=3.7.2,<3.8.0.
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
