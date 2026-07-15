@@ -8,7 +8,6 @@ candidate information using AI / NLP techniques.
 import json
 import os
 import tempfile
-import time
 from pathlib import Path
 
 import pandas as pd
@@ -20,19 +19,18 @@ from parser import parse_file, validate_file
 from extractor import ResumeExtractor
 from utils import prepare_json_download, prepare_csv_download
 
-# ---------------------------------------------------------------------------
+
 # Page configuration
-# ---------------------------------------------------------------------------
+
 st.set_page_config(
     page_title="AI Resume Parser",
     page_icon="📄",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+ 
+ #Custom CSS for styling the app 
 
-# ---------------------------------------------------------------------------
-# Custom CSS for a dark, professional HR-dashboard look
-# ---------------------------------------------------------------------------
 st.markdown(
     """
 <style>
@@ -299,9 +297,9 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ---------------------------------------------------------------------------
+
 # Session state
-# ---------------------------------------------------------------------------
+
 if "extracted_data" not in st.session_state:
     st.session_state.extracted_data = None
 if "extraction_error" not in st.session_state:
@@ -310,18 +308,15 @@ if "extracted_filename" not in st.session_state:
     st.session_state.extracted_filename = None
 
 
-# ---------------------------------------------------------------------------
 # Helper: load / cache spaCy model
-# ---------------------------------------------------------------------------
+# NOTE: en_core_web_sm is installed via requirements.txt on Streamlit Cloud
+# during the build phase. The filesystem is read-only at runtime, so we
+# NEVER try to download the model here.
+
 @st.cache_resource(show_spinner="Loading NLP model...")
 def load_spacy_model() -> SpacyLanguage:
-    """Load (and auto-download if needed) the spaCy English small model."""
-    try:
-        return spacy.load("en_core_web_sm")
-    except OSError:
-        with st.spinner("Downloading NLP model (one-time download)..."):
-            spacy.cli.download("en_core_web_sm")
-            return spacy.load("en_core_web_sm")
+    """Load the spaCy English small model (pre-installed via requirements.txt)."""
+    return spacy.load("en_core_web_sm")
 
 
 # ---------------------------------------------------------------------------

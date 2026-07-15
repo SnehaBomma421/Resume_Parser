@@ -7,9 +7,8 @@ education and experience entries, and generates a completeness score.
 """
 
 import re
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple
 
-import spacy
 from spacy import Language as SpacyLanguage
 
 
@@ -213,24 +212,18 @@ YEAR_PATTERN = re.compile(r"\b(19[5-9]\d|20[0-2]\d)\b")
 class ResumeExtractor:
     """Main class for extracting structured information from resume text."""
 
-    def __init__(self, nlp: Optional[SpacyLanguage] = None):
+    def __init__(self, nlp: SpacyLanguage):
         """
-        Initialise the extractor and load the spaCy model.
+        Initialise the extractor with a pre-loaded spaCy model.
 
-        If no model is provided, ``en_core_web_sm`` is downloaded and loaded
-        automatically.
+        The spaCy model MUST be loaded externally and passed in — this class
+        never downloads models at runtime (Streamlit Cloud's filesystem is
+        read-only outside the build phase).
 
         Args:
-            nlp: A pre-loaded spaCy Language object (optional).
+            nlp: A pre-loaded spaCy Language object.
         """
-        if nlp is not None:
-            self.nlp = nlp
-        else:
-            try:
-                self.nlp = spacy.load("en_core_web_sm")
-            except OSError:
-                spacy.cli.download("en_core_web_sm")
-                self.nlp = spacy.load("en_core_web_sm")
+        self.nlp = nlp
 
     # ------------------------------------------------------------------
     # Public API

@@ -3,3 +3,8 @@ spacy>=3.7.0
 pdfplumber>=0.10.0
 python-docx>=1.1.0
 pandas>=2.0.0
+
+# spaCy English model — must be pre-installed during build phase (Streamlit Cloud
+# filesystem is read-only at runtime; any runtime install attempt will fail).
+# https://spacy.io/models/en
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
